@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ASPNetCoreConfig.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace ASPNetCoreConfig.Controllers
@@ -17,10 +19,12 @@ namespace ASPNetCoreConfig.Controllers
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly IConfiguration _configuration;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, IConfiguration configuration)
         {
             _logger = logger;
+            _configuration = configuration;
         }
 
         [HttpGet]
@@ -35,5 +39,20 @@ namespace ASPNetCoreConfig.Controllers
             })
             .ToArray();
         }
+
+        
+        [HttpGet]
+        [Route("get-settings")]
+        public Settings GetSettings()
+        {
+            var settings = new Settings();
+
+            _configuration.Bind(settings);
+
+            var set = settings;
+
+            return settings;
+        }
+
     }
 }

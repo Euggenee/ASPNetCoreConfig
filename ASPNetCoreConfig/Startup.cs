@@ -1,3 +1,4 @@
+using ASPNetCoreConfig.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -6,13 +7,16 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
+
+
 namespace ASPNetCoreConfig
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
-            Configuration = configuration;
+           var Environment = environment;
+            Configuration = new ConfigurationBuilder().AddJsonFile($"appSettings.{environment.EnvironmentName}.json").Build();
         }
 
         public IConfiguration Configuration { get; }
@@ -20,6 +24,11 @@ namespace ASPNetCoreConfig
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var settings = new Settings();
+            Configuration.Bind(settings);
+
+            var set = settings;
+
             services.AddControllersWithViews();
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -65,8 +74,8 @@ namespace ASPNetCoreConfig
 
                 spa.Options.SourcePath = "ClientApp";
 
-                if (env.IsDevelopment())
-                {
+                if (env.IsDevelopment()) //if (env.IsDevelopment() || env.IsEnvironment("Staging"))
+                    {
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             });
