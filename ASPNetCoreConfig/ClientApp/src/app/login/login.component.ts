@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
   }
   login(form: NgForm) {
     const payload = form.value;
-    this.http.post(this.baseUrl + 'auth/login', payload).subscribe(result => {
+    this.http.post("https://localhost:44395/" + 'auth/login', payload).subscribe(result => {
       const token = (<any>result).token
       localStorage.setItem("jwt", token);
       this.invalidLogin = false;
@@ -31,6 +31,5 @@ export class LoginComponent implements OnInit {
         this.invalidLogin = true;
       }
     );
-
   }
 }

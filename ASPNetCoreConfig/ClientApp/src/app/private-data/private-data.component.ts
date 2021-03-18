@@ -12,7 +12,7 @@ export class PrivateDataComponent implements OnInit {
   public  privateDataset: Array<string>;
 
   constructor(http: HttpClient, @Inject('BASE_URL') baseURL: string) {
-    http.get<Array<string>>(baseURL + "privatedata").subscribe(result => {
+    http.get<Array<string>>("https://localhost:44395/" + "privatedata").subscribe(result => {
       this.privateDataset = result;
     },
       error => {

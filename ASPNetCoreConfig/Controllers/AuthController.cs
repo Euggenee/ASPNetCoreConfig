@@ -1,4 +1,5 @@
 ﻿using ASPNetCoreConfig.Models;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace ASPNetCoreConfig.Controllers
 {
+   
     [Route("[controller]")]
     [ApiController]
     public class AuthController : Controller
@@ -29,8 +31,8 @@ namespace ASPNetCoreConfig.Controllers
                 var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"));
                 var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
                 var tokenOptions = new JwtSecurityToken(
-                    issuer: "thhp://localhost:44382",
-                    audience: "thhp://localhost:44382",
+                    issuer: "http://localhost:5000",
+                    audience: "http://localhost:5000",
                     claims: new List<Claim>(),
                     expires: DateTime.Now.AddMinutes(5),
                     signingCredentials: signinCredentials

@@ -15,6 +15,7 @@ namespace ASPNetCoreConfig
 {
     public class Startup
     {
+
         public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
            var Environment = environment;
@@ -26,6 +27,7 @@ namespace ASPNetCoreConfig
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //JWT 
 
             services.AddAuthentication(opt =>
             {
@@ -40,11 +42,20 @@ namespace ASPNetCoreConfig
                     ValidateIssuer = true,
                     ValidateAudience = true,
                     ValidateLifetime = true,
-                    ValidIssuer = "thhp://localhost:44382",
-                    ValidAudience = "thhp://localhost:44382",
+                    ValidIssuer = "http://localhost:5000",
+                    ValidAudience = "http://localhost:5000", 
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"))
-
                 };
+            });
+
+            // Cors
+            services.AddCors(options => 
+            {
+                options.AddDefaultPolicy(
+                   builder => builder.WithOrigins("http://localhost:4200"));
+                options.AddPolicy("mypolicy", builder =>
+                    builder.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod().AllowCredentials());
+            
             });
 
             var settings = new Settings();
@@ -82,6 +93,7 @@ namespace ASPNetCoreConfig
             }
 
             app.UseRouting();
+            app.UseCors();
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -90,7 +102,7 @@ namespace ASPNetCoreConfig
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller}/{action=Index}/{id?}");
+                    pattern: "{controller}/{action=Index}/{id?}").RequireCors("mypolicy");
             });
 
             app.UseSpa(spa =>
