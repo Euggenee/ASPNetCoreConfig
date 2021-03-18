@@ -12,6 +12,8 @@ using System.Text;
 using DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using BussinessLayer.UserService;
+using System.Linq;
+using DataAccessLayer.Entities;
 
 namespace ASPNetCoreConfig
 {
@@ -25,6 +27,7 @@ namespace ASPNetCoreConfig
         }
 
         public IConfiguration Configuration { get; }
+
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -126,10 +129,47 @@ namespace ASPNetCoreConfig
                 spa.Options.SourcePath = "ClientApp";
 
                 if (env.IsDevelopment()) //if (env.IsDevelopment() || env.IsEnvironment("Staging"))
-                    {
+                {
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             });
+
+            SeedDefaultUsers(app);
+
+
+        }
+
+        private void SeedDefaultUsers(IApplicationBuilder app) 
+        {
+            var ScopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
+            using (var scope = ScopeFactory.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                if (dbContext.Users.FirstOrDefault(u => u.FirstName == "Jhon") == null)
+                {
+                    User johnDoe = new User
+                    {
+                        FirstName = "Jhon",
+                        LastName = "Doe"
+                    };
+                    User bStroustrup = new User
+                    {
+                        FirstName = "Bjarne",
+                        LastName = "Stroust"
+                    };
+                    User ITorvalds = new User
+                    {
+                        FirstName = "Linus",
+                        LastName = "Torvald"
+                    };
+
+                    dbContext.Users.Add(johnDoe);
+                    dbContext.Users.Add(bStroustrup);
+                    dbContext.Users.Add(ITorvalds);
+                    dbContext.SaveChanges();
+                }
+            
+            }
         }
     }
 }

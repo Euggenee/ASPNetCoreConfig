@@ -18,7 +18,7 @@ namespace ASPNetCoreConfig.Controllers
 
         private readonly IUserService _userService;
 
-        PrivateDataController(IUserService userService) 
+        public PrivateDataController(IUserService userService) 
         {
             _userService = userService; 
         }
