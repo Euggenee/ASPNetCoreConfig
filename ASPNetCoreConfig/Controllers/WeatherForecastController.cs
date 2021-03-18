@@ -41,6 +41,7 @@ namespace ASPNetCoreConfig.Controllers
             .ToArray();
         }
 
+
         
         [HttpGet]
         [Authorize]
