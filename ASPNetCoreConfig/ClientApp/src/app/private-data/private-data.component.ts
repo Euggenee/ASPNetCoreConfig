@@ -9,7 +9,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 })
 export class PrivateDataComponent implements OnInit {
 
-  public  privateDataset: Array<string>;
+  public privateDataset: Array<string>;
 
   constructor(http: HttpClient, @Inject('BASE_URL') baseURL: string) {
     http.get<Array<string>>("https://localhost:44395/" + "privatedata").subscribe(result => {

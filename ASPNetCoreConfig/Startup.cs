@@ -9,7 +9,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-
+using DataAccessLayer;
+using Microsoft.EntityFrameworkCore;
+using BussinessLayer.UserService;
 
 namespace ASPNetCoreConfig
 {
@@ -27,6 +29,12 @@ namespace ASPNetCoreConfig
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddDbContext<ApplicationDbContext>(options => 
+            {
+                options.UseSqlServer(Configuration["SqlServerConnectionString"], b => b.MigrationsAssembly("DataAccessLayer"));
+            });
+
             //JWT 
 
             services.AddAuthentication(opt =>
@@ -47,6 +55,9 @@ namespace ASPNetCoreConfig
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"))
                 };
             });
+
+            services.AddScoped<IApplicationDbContext, ApplicationDbContext>(); //настроили внедрение зависимости 
+            services.AddScoped<IUserService, UserService>();
 
             // Cors
             services.AddCors(options => 
