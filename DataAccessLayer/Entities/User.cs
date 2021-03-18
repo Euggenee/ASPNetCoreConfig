@@ -13,3 +13,4 @@ namespace DataAccessLayer.Entities
         public string LastName { get; set; }
     }
 }
+
