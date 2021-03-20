@@ -1,0 +1,16 @@
+<form #loginForm="ngForm" (ngSubmit)="checkIn(loginForm)">
+  <div>
+    <h2>Check In</h2>
+    <div *ngIf="invalidSingIn" class="alert alert-danger">
+      Invalid user credentionals
+    </div>
+    <br />
+    <label for="firstName">FirstName</label>
+    <input type="text" id="firstName" name="firstName" ngModel class="form-control" required autofocus />
+    <br />
+    <label for="lastName">Last Name</label>
+    <input type="text" id="lastName" name="lastName" ngModel class="form-control" required />
+    <br />
+    <button class="btn btn-lg btn-secondary btn-block" type="submit">Check in</button>
+  </div>
+</form>

@@ -33,48 +33,41 @@ namespace ASPNetCoreConfig
         public void ConfigureServices(IServiceCollection services)
         {
 
+             // Cors
+            services.AddCors(options => 
+                options.AddDefaultPolicy(builder => builder.AllowAnyOrigin())
+            );
+
             services.AddDbContext<ApplicationDbContext>(options => 
             {
                 options.UseSqlServer(Configuration["SqlServerConnectionString"], b => b.MigrationsAssembly("DataAccessLayer"));
             });
 
-            //JWT 
-
+            //JWT
             services.AddAuthentication(opt =>
             {
-
                 opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 
             }).AddJwtBearer(opt => {
-
                 opt.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidIssuer = "http://localhost:5000",
-                    ValidAudience = "http://localhost:5000", 
+                    ValidAudience = "http://localhost:5000",
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"))
                 };
             });
 
+            //Db
             services.AddScoped<IApplicationDbContext, ApplicationDbContext>(); //настроили внедрение зависимости 
             services.AddScoped<IUserService, UserService>();
 
-            // Cors
-            services.AddCors(options => 
-            {
-                options.AddDefaultPolicy(
-                   builder => builder.WithOrigins("http://localhost:4200"));
-                options.AddPolicy("mypolicy", builder =>
-                    builder.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod().AllowCredentials());
-            
-            });
-
+            //settings
             var settings = new Settings();
             Configuration.Bind(settings);
-
             var set = settings;
 
             services.AddControllersWithViews();
@@ -110,22 +103,15 @@ namespace ASPNetCoreConfig
             app.UseCors();
             app.UseAuthentication();
             app.UseAuthorization();
-
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller}/{action=Index}/{id?}").RequireCors("mypolicy");
+                    pattern: "{controller}/{action=Index}/{id?}");
             });
 
             app.UseSpa(spa =>
             {
-
-
-                // To learn more about options for serving an Angular SPA from ASP.NET Core,
-                // see https://go.microsoft.com/fwlink/?linkid=864501
-
                 spa.Options.SourcePath = "ClientApp";
 
                 if (env.IsDevelopment()) //if (env.IsDevelopment() || env.IsEnvironment("Staging"))
@@ -135,8 +121,6 @@ namespace ASPNetCoreConfig
             });
 
             SeedDefaultUsers(app);
-
-
         }
 
         private void SeedDefaultUsers(IApplicationBuilder app) 

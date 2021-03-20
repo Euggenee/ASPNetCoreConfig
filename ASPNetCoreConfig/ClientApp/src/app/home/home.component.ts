@@ -8,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
 export class HomeComponent {
   public settings: Settings
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-    http.get<Settings>(baseUrl + 'weatherforecast/get-settings').subscribe(result => {
+    http.get<Settings>("https://localhost:44395/" + 'weatherforecast/get-settings').subscribe(result => {
       this.settings = result;
     }, error => console.error(error));
   }

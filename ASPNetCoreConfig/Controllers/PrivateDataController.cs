@@ -18,9 +18,9 @@ namespace ASPNetCoreConfig.Controllers
 
         private readonly IUserService _userService;
 
-        public PrivateDataController(IUserService userService) 
+        public PrivateDataController(IUserService userService)
         {
-            _userService = userService; 
+            _userService = userService;
         }
 
         [HttpGet]
@@ -28,7 +28,7 @@ namespace ASPNetCoreConfig.Controllers
         public IEnumerable<string> Get()
         {
 
-            return new string[] {"First secred data string", "Second secred data string"};
+            return new string[] { "First secred data string", "Second secred data string" };
         }
 
         [HttpGet]
@@ -37,6 +37,15 @@ namespace ASPNetCoreConfig.Controllers
         public List<User> GetAllUsers()
         {
             return _userService.GetAll();
+        }
+
+
+        [HttpPost]
+        [Route("post-user")]
+        public void AddNewUser(User user)
+        {
+            _userService.AddUser(user);
+
         }
     }
 }
