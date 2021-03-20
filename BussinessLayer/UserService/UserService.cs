@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BussinessLayer.UserService
 {
-   public class UserService : IUserService
-    {
+    public class UserService : IUserService
+    { 
 
         private readonly ApplicationDbContext _dbContext;
         public UserService(ApplicationDbContext dbContext) // Здесь пройдет инициал. благодаря механизму адд скопе класса стартап
@@ -33,7 +33,7 @@ namespace BussinessLayer.UserService
 
         public void AddUser(User user) 
         {
-            var tempUser = new DataAccessLayer.Entities.User { FirstName = user.FirstName, LastName = user.LastName };
+            var tempUser = new DataAccessLayer.Entities.User { FirstName = user.FirstName, LastName = user.LastName, NickName = user.NickName, Password = user.Password};
             if (tempUser != null)
             {
                 _dbContext.Users.Add(tempUser);
@@ -41,5 +41,6 @@ namespace BussinessLayer.UserService
             }
            
         }
+
     }
 }

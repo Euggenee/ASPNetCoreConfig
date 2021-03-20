@@ -1,14 +1,14 @@
-﻿using ASPNetCoreConfig.Models;
-using Microsoft.AspNetCore.Cors;
+﻿using BussinessLayer.Models;
+using BussinessLayer.AuthService;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
+
 
 namespace ASPNetCoreConfig.Controllers
 {
@@ -17,28 +17,25 @@ namespace ASPNetCoreConfig.Controllers
     [ApiController]
     public class AuthController : Controller
     {
+        private readonly IAuthService _authService;
+        public AuthController(IAuthService authService)
+        {
+            _authService = authService;
+        }
+
         [HttpPost]
         [Route("login")]
-        public IActionResult Login(LoginModels user) 
+        public IActionResult Login(Login user) 
         {
-            if (user == null) 
+           bool userIdentification = _authService.UserIdentification(user);
+
+            if (userIdentification == false) 
             {
                 return BadRequest("Invalid data");
-
             }
-            if (user.UserName == "jon" && user.Password == "123")
+            if (userIdentification)
             {
-                var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"));
-                var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-                var tokenOptions = new JwtSecurityToken(
-                    issuer: "http://localhost:5000",
-                    audience: "http://localhost:5000",
-                    claims: new List<Claim>(),
-                    expires: DateTime.Now.AddMinutes(5),
-                    signingCredentials: signinCredentials
-                    );
-                var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-                return Ok(new{Token = tokenString });
+                return Ok(new{Token =  _authService.GetToken()});
             }
             else
             {

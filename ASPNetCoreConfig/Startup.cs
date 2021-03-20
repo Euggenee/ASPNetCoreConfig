@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using BussinessLayer.UserService;
 using System.Linq;
 using DataAccessLayer.Entities;
+using BussinessLayer.AuthService;
 
 namespace ASPNetCoreConfig
 {
@@ -64,6 +65,7 @@ namespace ASPNetCoreConfig
             //Db
             services.AddScoped<IApplicationDbContext, ApplicationDbContext>(); //настроили внедрение зависимости 
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAuthService, AuthService>();
 
             //settings
             var settings = new Settings();
