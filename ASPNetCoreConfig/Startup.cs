@@ -14,6 +14,8 @@ using Microsoft.EntityFrameworkCore;
 using BussinessLayer.UserService;
 using System.Linq;
 using DataAccessLayer.Entities;
+using Microsoft.OpenApi.Models; // swagger
+
 
 namespace ASPNetCoreConfig
 {
@@ -33,6 +35,7 @@ namespace ASPNetCoreConfig
         public void ConfigureServices(IServiceCollection services)
         {
 
+           
              // Cors
             services.AddCors(options => 
                 options.AddDefaultPolicy(builder => builder.AllowAnyOrigin())
@@ -65,6 +68,15 @@ namespace ASPNetCoreConfig
             services.AddScoped<IApplicationDbContext, ApplicationDbContext>(); //настроили внедрение зависимости 
             services.AddScoped<IUserService, UserService>();
 
+            //Swager
+
+            services.AddSwaggerGen(sw=>
+            {
+                sw.SwaggerDoc("v1", new OpenApiInfo {Title = "Swagger API", Version = "version 1"});
+           /*     sw.SwaggerDoc("v2", new OpenApiInfo {Title = "Swager API", Version = "version 2"});*/
+            });
+
+
             //settings
             var settings = new Settings();
             Configuration.Bind(settings);
@@ -84,6 +96,12 @@ namespace ASPNetCoreConfig
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();                   //  генерит док для описания swagger
+                app.UseSwaggerUI(sw => 
+                {
+                    sw.SwaggerEndpoint("/swagger/v1/swagger.json", "Api v1");  // путь к док который нужно сгенерир
+                });
+
             }
             else
             {

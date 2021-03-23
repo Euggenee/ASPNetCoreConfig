@@ -41,5 +41,75 @@ namespace BussinessLayer.UserService
             }
            
         }
+
+        public User GetById(string id)
+        {
+            var user = _dbContext.Users.FirstOrDefault(u => u.Id == id);
+            if (user == null)
+            {
+                return null;
+            }
+            else 
+            {
+                var foundUser = new User
+                {
+                    Id = user.Id,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName
+                };
+                return foundUser;
+            }
+            
+        }
+
+        public User AdddUser(User user)
+        {
+            var userToAdd = new DataAccessLayer.Entities.User
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName
+            };
+            _dbContext.Users.Add(userToAdd);
+            _dbContext.SaveChanges();
+            return user;
+        }
+
+        public User EditUser(User user)
+        {
+            var userToEdit = _dbContext.Users.FirstOrDefault(u => u.Id == user.Id);
+
+            if (userToEdit != null)
+            {
+                userToEdit.FirstName = user.FirstName;
+                userToEdit.LastName = user.LastName;
+             
+                _dbContext.Users.Update(userToEdit);
+                _dbContext.SaveChanges();
+
+                return user;
+            }
+            else
+            {
+                return null;
+            }
+
+        }
+
+        public bool Delete(string id)
+        {
+           var user =  _dbContext.Users.FirstOrDefault(u => u.Id == id);
+
+            if ( user != null) 
+            {
+                _dbContext.Users.Remove(user);
+                _dbContext.SaveChanges();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+          
+        }
     }
 }

@@ -9,5 +9,14 @@ namespace BussinessLayer.UserService
     {
         List<User> GetAll();
         void AddUser(User user);
+
+        User GetById(string id);
+
+        User AdddUser(User user);
+
+        User EditUser(User user);
+
+        bool Delete(string id);
+
     }
 }

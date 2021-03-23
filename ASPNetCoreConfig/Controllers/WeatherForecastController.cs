@@ -44,7 +44,6 @@ namespace ASPNetCoreConfig.Controllers
 
         
         [HttpGet]
-        [Authorize]
         [Route("get-settings")]
         public Settings GetSettings()
         {
