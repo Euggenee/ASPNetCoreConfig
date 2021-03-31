@@ -15,7 +15,7 @@ using BussinessLayer.UserService;
 using System.Linq;
 using DataAccessLayer.Entities;
 using Microsoft.OpenApi.Models; // swagger
-
+using BussinessLayer.ComputerService;
 
 namespace ASPNetCoreConfig
 {
@@ -67,6 +67,7 @@ namespace ASPNetCoreConfig
             //Db
             services.AddScoped<IApplicationDbContext, ApplicationDbContext>(); //настроили внедрение зависимости 
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IComputerService, ComputerService>();
 
             //Swager
 
