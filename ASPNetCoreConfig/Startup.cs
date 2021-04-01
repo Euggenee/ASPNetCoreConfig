@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using BussinessLayer.UserService;
 using System.Linq;
 using DataAccessLayer.Entities;
+using BussinessLayer.BookService;
 
 namespace ASPNetCoreConfig
 {
@@ -61,9 +62,15 @@ namespace ASPNetCoreConfig
                 };
             });
 
+
+            // Swagerr
+            services.AddSwaggerGen(opt => opt.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo() {Title = "SwagerApi", Version = "v1" }));
+            
+
             //Db
             services.AddScoped<IApplicationDbContext, ApplicationDbContext>(); //настроили внедрение зависимости 
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IBookService, BookService>();
 
             //settings
             var settings = new Settings();
@@ -84,6 +91,8 @@ namespace ASPNetCoreConfig
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI();
             }
             else
             {
