@@ -51,26 +51,6 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("ComputerModels");
                 });
 
-            modelBuilder.Entity("DataAccessLayer.Entities.ComputerModelTag", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("TagExpiration")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TagMeta")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TageName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ComputerModelTags");
-                });
-
             modelBuilder.Entity("DataAccessLayer.Entities.User", b =>
                 {
                     b.Property<string>("Id")
