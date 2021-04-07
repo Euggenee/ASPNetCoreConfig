@@ -139,10 +139,10 @@ namespace ASPNetCoreConfig
                 }
             });
 
-            SeedDefaultUsers(app);
+            SeedDefaultData(app);
         }
 
-        private void SeedDefaultUsers(IApplicationBuilder app) 
+        private void SeedDefaultData(IApplicationBuilder app) 
         {
             var ScopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
             using (var scope = ScopeFactory.CreateScope())
@@ -171,6 +171,76 @@ namespace ASPNetCoreConfig
                     dbContext.Users.Add(ITorvalds);
                     dbContext.SaveChanges();
                 }
+                if (dbContext.ComputerManufacturers.FirstOrDefault()==null)
+                {
+                    var computerManufacturerOne = new ComputerManufacturer
+                    {
+                          ManufacturerName="Aser"
+                    };
+                    var computerManufacturerTwo = new ComputerManufacturer
+                    {
+                        ManufacturerName = "Toshiba"
+                    };
+                    dbContext.AddRange(computerManufacturerOne, computerManufacturerTwo);
+                    dbContext.SaveChanges();
+                    var computerModelAserOne = new ComputerModel
+                    {
+                         ModelName = "A1",
+                         ComputerManufacturerId = computerManufacturerOne.Id
+                    };
+                    var computerModelAserTwo = new ComputerModel
+                    {
+                        ModelName = "A2",
+                        ComputerManufacturerId = computerManufacturerOne.Id
+                    };
+
+                    var computerModelToshibaOne = new ComputerModel
+                    {
+                        ModelName = "Rapid",
+                        ComputerManufacturerId = computerManufacturerTwo.Id
+                    };
+                    var computerModelToshibaTwo = new ComputerModel
+                    {
+                        ModelName = "More fast",
+                        ComputerManufacturerId = computerManufacturerTwo.Id
+                    };
+                    dbContext.AddRange(computerModelAserOne, computerModelAserTwo, computerModelToshibaOne, computerModelToshibaTwo);
+                    dbContext.SaveChanges();
+
+                   /* var aserTageOne = new ComputerModelTag
+                    { 
+                     TageName ="aserTegOne",
+                     TagMeta = "aserTegOne_Meta",
+                     TagExpiration = "4/6/2021",
+                     ComputerModelId = computerModelAserOne.Id
+                    };
+                    var aserTageTwo = new ComputerModelTag
+                    {
+                        TageName = "aserTegTwo",
+                        TagMeta = "aserTegTwo_Meta",
+                        TagExpiration = "4/16/2021",
+                        ComputerModelId = computerModelAserOne.Id
+                    };
+                    var aserTageThree = new ComputerModelTag
+                    {
+                        TageName = "aserTegThree",
+                        TagMeta = "aserTegThree_Meta",
+                        TagExpiration = "4/20/2021",
+                        ComputerModelId = computerModelAserOne.Id
+                    };
+                    var aserTageFour = new ComputerModelTag
+                    {
+                        TageName = "aserTegFour",
+                        TagMeta = "aserTegFour_Meta",
+                        TagExpiration = "4/21/2021",
+                        ComputerModelId = computerModelAserOne.Id
+                    };
+                    dbContext.AddRange(aserTageOne, aserTageTwo, aserTageThree, aserTageFour);
+                    dbContext.SaveChanges();
+*/
+                }
+
+              var compModelsTagExpandet = dbContext.ComputerModelTags.ToList();
             
             }
         }
