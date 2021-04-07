@@ -11,5 +11,6 @@ namespace DataAccessLayer.Entities
         public string Id { get; set; }
         public string ModelName { get; set; }
         public string ComputerManufacturerId { get; set;}             // Foreigen key
+        public ICollection<ComputerModelTag> ComputerModelTags { get; set; }
     }
 }
