@@ -1,6 +1,9 @@
 ﻿using ASPNetCoreConfig.Models;
+using BussinessLayer.ComputerService;
+using DataAccessLayer;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -17,10 +20,27 @@ namespace ASPNetCoreConfig.Controllers
     [ApiController]
     public class AuthController : Controller
     {
+        //тестовое использование  ComputerService Заменили на AdvansedComputerService видим что все изм занимают много времени
+        /* private readonly AdvansedComputerService _advansedComputerService;
+         public AuthController(IApplicationDbContext applicationDbContext, ILogger logger)
+         {
+             _advansedComputerService = new AdvansedComputerService(applicationDbContext, logger);
+         }*/
+
+        private readonly IComputerService _computerService;
+        public AuthController(IComputerService computerService)
+        {
+            _computerService = computerService;
+        }
+
         [HttpPost]
         [Route("login")]
         public IActionResult Login(LoginModels user) 
         {
+            //тестовое использование  ComputerService
+            // var manufacturers = _advansedComputerService.GetComputerManufacturers();
+             var manufacturers = _computerService.GetComputerManufacturers();
+
             if (user == null) 
             {
                 return BadRequest("Invalid data");

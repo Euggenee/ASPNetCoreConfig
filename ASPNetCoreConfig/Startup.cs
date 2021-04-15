@@ -16,6 +16,8 @@ using System.Linq;
 using DataAccessLayer.Entities;
 using Microsoft.OpenApi.Models; // swagger
 using BussinessLayer.ComputerService;
+using Microsoft.Extensions.Logging;
+using BussinessLayer.Lifecycle;
 
 namespace ASPNetCoreConfig
 {
@@ -63,11 +65,26 @@ namespace ASPNetCoreConfig
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"))
                 };
             });
+            //startap Logger так выгл€дит когда все делаем руц€ми вместо инжект)
+            var serviceProvider = services.BuildServiceProvider();
+            var logger = serviceProvider.GetService<ILogger<object>>();   //object нужно вообщето типизировать
+            services.AddSingleton(typeof(ILogger), logger);
+
+            //AddScoped(), AddSingleton(), AddTransient() ¬строенные ћетоды управлени€ жизненным циклом зависимости 
+            //AddScoped() врем€ существовани€ запроса 
+            //AddTransient() даже врамка одного запроса  создает новый экземпл€р
+            //AddSingleton() зоздает обект при первом обращщени€  и жизненный цикл равен жизненному циклу прилож умрет после остановки сервера прилож
 
             //Db
             services.AddScoped<IApplicationDbContext, ApplicationDbContext>(); //настроили внедрение зависимости 
             services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IComputerService, ComputerService>();
+            //services.AddScoped<IComputerService, ComputerService>();
+            //startap Logger так выгл€дит когда подмен€ем четез инжект
+            services.AddScoped<IComputerService, AdvansedComputerService>();
+
+            services.AddScoped<IScopedInterface, LifecycleService>();
+            services.AddTransient<ITransientInterfase, LifecycleService>();
+            services.AddSingleton<ISingletonInterfase, LifecycleService>();
 
             //Swager
 
