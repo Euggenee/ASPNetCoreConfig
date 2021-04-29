@@ -18,6 +18,7 @@ using Microsoft.OpenApi.Models; // swagger
 using BussinessLayer.ComputerService;
 using Microsoft.Extensions.Logging;
 using BussinessLayer.Lifecycle;
+using BussinessLayer.Life;
 
 namespace ASPNetCoreConfig
 {
@@ -86,8 +87,13 @@ namespace ASPNetCoreConfig
             services.AddTransient<ITransientInterfase, LifecycleService>();
             services.AddSingleton<ISingletonInterfase, LifecycleService>();
 
-            //Swager
 
+            //leaaonvideo
+            services.AddScoped<IScoupe, Life>();
+            services.AddTransient<ITrans, Life>();
+            services.AddSingleton<ISingl, Life>();
+
+            //Swager
             services.AddSwaggerGen(sw=>
             {
                 sw.SwaggerDoc("v1", new OpenApiInfo {Title = "Swagger API", Version = "version 1"});
